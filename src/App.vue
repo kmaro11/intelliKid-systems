@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import Table from "./components/Table.vue";
+import Table from './components/Table.vue';
 </script>
 
-
-
 <template>
-  <Table />
+	<Table />
 </template>
