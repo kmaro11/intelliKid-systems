@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useFetchData } from '../composables/useFetchData.ts';
 import { useListSort } from '../composables/useListSort.ts';
 import { useVirtualList } from '@vueuse/core';
+import TableCell from './TableCell.vue';
 
 const tableColumns = ref<{ label: string; key: number }[]>([]);
 const tableRows = ref<Record<string, string>[]>([]);
@@ -45,13 +46,11 @@ onMounted(() => fetchData());
 	<div class="table">
 		<div v-bind="containerProps" style="max-height: 90vh; height: 100%">
 			<div class="table-row--header table-row">
-				<div
+				<TableCell
 					v-for="column in tableColumns"
 					:key="column.key"
-					class="table-cell"
-				>
-					{{ column.label }}
-				</div>
+					:text="column.label"
+				/>
 			</div>
 
 			<div v-bind="wrapperProps">
@@ -60,36 +59,23 @@ onMounted(() => fetchData());
 					:key="index"
 					class="table-row"
 				>
-					<div
+					<TableCell
 						v-for="column in tableColumns"
 						:key="column.key"
-						class="table-cell"
-					>
-						{{ getRowCellText(data, column.label) }}
-					</div>
+						:text="getRowCellText(data, column.label)"
+					/>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
-<style scoped lang="css">
+<style lang="css">
 .table {
 	--main-grey-color: #ececec;
 }
 
 .table-row {
 	display: flex;
-}
-
-.table-cell {
-	width: 80px;
-	padding: 8px;
-	flex-shrink: 0;
-	border-right: 1px solid var(--main-grey-color);
-	border-bottom: 1px solid var(--main-grey-color);
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 }
 
 .table-row--header .table-cell {
