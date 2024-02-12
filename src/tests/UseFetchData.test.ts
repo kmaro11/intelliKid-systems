@@ -11,11 +11,11 @@ describe('useFetchData', () => {
   }
 
   it('fetches data from the given URL', async () => {
-    globalThis.fetch = vi.fn(() =>
+    globalThis.fetch  = vi.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve(response),
-      })
-    );
+      })  as Promise<Response>
+    )
 
     const { data, error } = await useFetchData('https://example.com/api/data');
 

@@ -20,7 +20,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/tests/UseFetchData.test.js", "src/tests/Table.test.js", "src/tests/TableCell.test.js"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/tests/UseFetchData.test.ts", "src/tests/Table.test.ts", "src/tests/TableCell.test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "exclude": ["node_modules/**"]
 }
