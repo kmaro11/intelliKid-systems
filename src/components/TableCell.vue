@@ -3,9 +3,11 @@ defineProps<{
 	text: string;
 }>();
 </script>
+
 <template>
 	<div class="table-cell">{{ text }}</div>
 </template>
+
 <style lang="css">
 .table-cell {
 	width: 80px;

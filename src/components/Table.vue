@@ -4,21 +4,33 @@ import { useFetchData } from '../composables/useFetchData.ts';
 import { useVirtualList } from '@vueuse/core';
 import TableCell from './TableCell.vue';
 
+const errorMeassage = ref('');
 const tableColumns = ref<string[]>([]);
 const tableRows = ref<Record<string, string>[]>([]);
 
 const fetchData = async (): Promise<void> => {
-	const data: {
-		columns: string[];
-		rows: Record<string, string>[];
+	errorMeassage.value = '';
+
+	const {
+		data,
+		error,
+	}: {
+		data: {
+			columns: string[];
+			rows: Record<string, string>[];
+		} | null;
+		error: Error | null;
 	} = await useFetchData('./src/data/huge.json');
 
 	if (data) {
 		tableColumns.value = data.columns.sort((a, b) =>
 			a.localeCompare(b, undefined, { numeric: true }),
 		);
-
 		tableRows.value = data.rows;
+	}
+
+	if (error) {
+		errorMeassage.value = 'No data found';
 	}
 };
 
@@ -35,8 +47,12 @@ const { list, containerProps, wrapperProps } = useVirtualList(tableRows, {
 
 onMounted(() => fetchData());
 </script>
+
 <template>
-	<div class="table">
+	<div v-if="errorMeassage">
+		{{ errorMeassage }}
+	</div>
+	<div v-else class="table">
 		<div v-bind="containerProps" style="max-height: 90vh; height: 100%">
 			<div class="table-row--header table-row">
 				<TableCell
@@ -62,6 +78,7 @@ onMounted(() => fetchData());
 		</div>
 	</div>
 </template>
+
 <style lang="css">
 .table {
 	--main-grey-color: #ececec;
