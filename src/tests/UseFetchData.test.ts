@@ -1,8 +1,23 @@
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 import { useFetchData } from "../composables/useFetchData";
 
-test('Should fetch data', async () => {
-    const result = await useFetchData('./src/data/huge.json');
+global.fetch = vi.fn()
 
-    expect(result).toEqual({columns: ['column_1']})
+function createFetchResponse(data) {
+    return { json: () => new Promise((resolve) => resolve(data)) }
+}
+
+test('Should fetch data', async () => {
+    const response = [
+        {
+          column: [],
+          rows: [],
+        },
+      ]
+
+      fetch.mockResolvedValue(createFetchResponse(response))
+
+      const todoList = await useFetchData('some-url')
+
+      expect(todoList).toStrictEqual(response)
 })

@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 import { useFetchData } from '../composables/useFetchData.ts';
-import { useListSort } from '../composables/useListSort.ts';
 import { useVirtualList } from '@vueuse/core';
 import TableCell from './TableCell.vue';
 
-const tableColumns = ref<{ label: string; key: number }[]>([]);
+const tableColumns = ref<string[]>([]);
 const tableRows = ref<Record<string, string>[]>([]);
 
 const fetchData = async (): Promise<void> => {
@@ -15,14 +14,8 @@ const fetchData = async (): Promise<void> => {
 	} = await useFetchData('./src/data/huge.json');
 
 	if (data) {
-		tableColumns.value = useListSort(
-			data.columns.map((column) => {
-				return {
-					label: column,
-					key: parseInt(column.split('_')[1]),
-				};
-			}),
-			'key',
+		tableColumns.value = data.columns.sort((a, b) =>
+			a.localeCompare(b, undefined, { numeric: true }),
 		);
 
 		tableRows.value = data.rows;
@@ -48,8 +41,8 @@ onMounted(() => fetchData());
 			<div class="table-row--header table-row">
 				<TableCell
 					v-for="column in tableColumns"
-					:key="column.key"
-					:text="column.label"
+					:key="column"
+					:text="column"
 				/>
 			</div>
 
@@ -61,8 +54,8 @@ onMounted(() => fetchData());
 				>
 					<TableCell
 						v-for="column in tableColumns"
-						:key="column.key"
-						:text="getRowCellText(data, column.label)"
+						:key="column"
+						:text="getRowCellText(data, column)"
 					/>
 				</div>
 			</div>
