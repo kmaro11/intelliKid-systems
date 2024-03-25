@@ -49,7 +49,6 @@ onMounted(() => fetchData());
 </script>
 
 <template>
-	Idomu, ar viskas pasideployns
 	<div v-if="errorMeassage">
 		{{ errorMeassage }}
 	</div>
